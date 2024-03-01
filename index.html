@@ -236,8 +236,16 @@
             font-size: 12px; /* 모바일에서 폰트 크기를 더 줄임 */
             padding: 4px 8px; /* 모바일에서 패딩을 더 줄임 */
         }
+
+        /* 수정된 스타일 */
+        .remark-input {
+            flex-basis: 100%; /* 칸을 위로 넓게 설정 */
+            max-width: 100%;
+            margin-top: 5px; /* 위쪽 마진 추가 */
+            font-size: 130%; /* 폰트 크기를 살짝 크게 설정 */
+        }
     </style>
-	</head>
+    </head>
 <body>
 
 <div class="date-info-container">
@@ -299,7 +307,7 @@ function createParticipantElement(participantData, index) {
 
     const remarkInput = document.createElement('input');
     remarkInput.type = 'text';
-    remarkInput.placeholder = '특이사항';
+    remarkInput.placeholder = '관찰일지'; // 수정된 부분
     remarkInput.classList.add('remark-input');
     remarkInput.dataset.index = index;
 
@@ -478,7 +486,7 @@ function copyAttendanceStatus() {
     const eventName = eventNameInput.value;
 
     let csvText = `날짜: ${dateString}\t행사명: ${eventName}\n\n`;
-    csvText += "학번\t이름\t출결\t특이사항\n";
+    csvText += "학번\t이름\t출결\t관찰일지\n"; // 수정된 부분
 
     const participantElements = document.querySelectorAll('.participant');
     participantElements.forEach((element) => {

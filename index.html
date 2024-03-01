@@ -144,9 +144,9 @@
     <div class="fixed-container">
         
         <button id="reset-button" class="control-button">리셋</button>
-        <button id="attendance-summary" class="summary-button">1차기록: 0</button>
-        <button id="tardy-summary" class="summary-button">2차기록: 0</button>
-        <button id="absent-summary" class="summary-button">3차기록: 0</button>
+        <button id="attendance-summary" class="summary-button">우수: 0</button>
+        <button id="tardy-summary" class="summary-button">매우우수: 0</button>
+        <button id="absent-summary" class="summary-button">독보적: 0</button>
         <button id="copy-button" class="control-button">복사</button>
     </div>
     <div style="height: 50px;"></div>
@@ -199,7 +199,7 @@ function createParticipantElement(participantData, index) {
     nameDiv.classList.add('name-box');
 
     const observationTextarea = document.createElement('textarea');
-    observationTextarea.placeholder = '관찰일지...';
+    observationTextarea.placeholder = '관찰일지';
     observationTextarea.classList.add('observation-textarea');
     observationTextarea.dataset.index = index;
 
@@ -305,9 +305,9 @@ function updateSummaryCounts() {
     const attendanceSummaryButton = document.getElementById('attendance-summary');
     const tardySummaryButton = document.getElementById('tardy-summary');
     const absentSummaryButton = document.getElementById('absent-summary');
-    attendanceSummaryButton.textContent = `출석: ${attendanceCount}`;
-    tardySummaryButton.textContent = `지각: ${tardyCount}`;
-    absentSummaryButton.textContent = `결석: ${absentCount}`;
+    attendanceSummaryButton.textContent = `우수: ${attendanceCount}`;
+    tardySummaryButton.textContent = `매우우수: ${tardyCount}`;
+    absentSummaryButton.textContent = `독보적: ${absentCount}`;
 }
 
 function setupButtons() {
@@ -365,10 +365,10 @@ function copyDataToClipboard() {
             const bgColor = participant.style.backgroundColor;
             const observation = observationTextarea.value;
             let status = '미정';
-            if (bgColor === 'lightskyblue') status = '출석';
-            else if (bgColor === 'lightpink') status = '지각';
-            else if (bgColor === 'red') status = '결석';
-            clipboardText += `${serial}\t ${name}\t ${observation}\n`;
+            if (bgColor === 'lightskyblue') status = '우수';
+            else if (bgColor === 'lightpink') status = '매우우수';
+            else if (bgColor === 'red') status = '독보적';
+           clipboardText += `학번: ${serial}\t이름: ${name}\t상태: ${status}\t관찰일지: ${observation}\n`;
         }
     });
 

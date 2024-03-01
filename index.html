@@ -151,8 +151,8 @@
     </div>
     <div style="height: 50px;"></div>
 
-  <script>
-  async function fetchSheetData() {
+ <script>
+async function fetchSheetData() {
     const sheetId = '1JsMGoD5enBE0EtMfihOy_58HcG1dzcDfEtxn2M0Y65Q';
     const apiKey = 'AIzaSyDrClgUbT-0cFoYe4W81dyxikZVbjVlcT8';
     const range = 'art';
@@ -311,19 +311,8 @@ function updateSummaryCounts() {
 }
 
 function setupButtons() {
-    const allAttendanceButton = document.getElementById('all-attendance-button');
     const resetButton = document.getElementById('reset-button');
-    const classSelect = document.getElementById('class-select');
-
-    allAttendanceButton.addEventListener('click', () => {
-        document.querySelectorAll('.participant').forEach((participant, index) => {
-            if (participant.style.backgroundColor !== 'lightskyblue') {
-                participant.style.backgroundColor = 'lightskyblue';
-                saveParticipantState(index + 1, { clickCount: 1, backgroundColor: 'lightskyblue', observation: participant.querySelector('.observation-textarea').value });
-            }
-        });
-        updateSummaryCounts();
-    });
+    const copyButton = document.getElementById('copy-button');
 
     resetButton.addEventListener('click', () => {
         if (confirm('모든 데이터를 리셋하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
@@ -332,11 +321,6 @@ function setupButtons() {
         }
     });
 
-    classSelect.addEventListener('change', function() {
-        displayParticipants(this.value);
-    });
-
-    const copyButton = document.getElementById('copy-button');
     copyButton.addEventListener('click', () => {
         copyDataToClipboard();
     });
@@ -368,7 +352,7 @@ function copyDataToClipboard() {
             if (bgColor === 'lightskyblue') status = '우수';
             else if (bgColor === 'lightpink') status = '매우우수';
             else if (bgColor === 'red') status = '독보적';
-           clipboardText += `학번: ${serial}\t이름: ${name}\t상태: ${status}\t관찰일지: ${observation}\n`;
+           clipboardText += `${serial}\t${name}\t${status}\t${observation}\n`;
         }
     });
 
@@ -386,8 +370,8 @@ window.onload = async () => {
     await displayParticipants('all');
     setupButtons();
 };
-
 </script>
+
 
 
 

@@ -163,17 +163,10 @@
             margin-bottom: 5px;
         }
 
-       @media only screen and (max-width: 600px) {
-    .participant div, .participant a {
-        flex-basis: 100%;
-        max-width: 100%;
-    }
-
-    .participant .remark-input {
-        order: 3;
-        flex-basis: 100%;
-        max-width: 100%;
-    }
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 5px;
+            }
 
             .participant div, .participant a {
                 flex-basis: 50%;
@@ -207,7 +200,7 @@
             background: white;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(0            , 0, 0.3);
         }
 
         .popup-image {
@@ -236,18 +229,23 @@
             font-size: 12px; /* 모바일에서 폰트 크기를 더 줄임 */
             padding: 4px 8px; /* 모바일에서 패딩을 더 줄임 */
         }
-
-        /* 수정된 스타일 */
-        .remark-input {
-            flex-basis: 100%; /* 칸을 위로 넓게 설정 */
-            max-width: 100%;
-            margin-top: 5px; /* 위쪽 마진 추가 */
-            font-size: 130%; /* 폰트 크기를 살짝 크게 설정 */
-        }
     </style>
-    </head>
+</head>
 <body>
-
+<select id="class-select" style="font-size: 24px; text-align: center; width: 80%; margin: 20px auto; padding: 10px;">
+    <option value="all">모든 반</option>
+    <option value="201">201반</option>
+    <option value="202">202반</option>
+    <option value="203">203반</option>
+    <option value="204">204반</option>
+    <option value="205">205반</option>
+    <option value="206">206반</option>
+    <option value="207">207반</option>
+    <option value="208">208반</option>
+    <option value="209">209반</option>
+    <option value="210">210반</option>
+    <option value="211">211반</option>
+</select>
 <div class="date-info-container">
     <div id="date-info" class="date-info"></div>
 </div>
@@ -256,13 +254,15 @@
 </div>
 <div id="participants" class="container"></div>
 
+
+
 <div class="fixed-container">
     <button id="all-attendance-button" class="control-button">올출석</button>
     <button id="reset-button" class="control-button">리셋</button>
     <button id="attendance-summary" class="summary-button">출석: 0</button>
     <button id="tardy-summary" class="summary-button">지각: 0</button>
     <button id="absent-summary" class="summary-button">결석: 0</button>
-    <button id="copy-button" class="control-button">복사</button> <!-- ID가 'copy-button'인 '복사' 버튼 -->
+    <button id="copy-button" class="control-button">복사</button>
 </div>
 
 <div id="popup-overlay" class="popup-overlay">
@@ -273,22 +273,43 @@
 </div>
 <div style="height: 50px;"></div>
 
-<script>
-async function fetchSheetData() {
-    const sheetId = '1JsMGoD5enBE0EtMfihOy_58HcG1dzcDfEtxn2M0Y65Q';
-    const apiKey = 'AIzaSyDrClgUbT-0cFoYe4W81dyxikZVbjVlcT8';
-    const range = 'art';
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+ <script>
+    async function fetchSheetData() {
+        const sheetId = '1JsMGoD5enBE0EtMfihOy_58HcG1dzcDfEtxn2M0Y65Q';
+        const apiKey = 'AIzaSyDrClgUbT-0cFoYe4W81dyxikZVbjVlcT8';
+        const range = 'art';
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.values;
-    } catch (error) {
-        console.error('Error fetching sheet data:', error);
-        return [];
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.values;
+        } catch (error) {
+            console.error('Error fetching sheet data:', error);
+            return [];
+        }
     }
+	async function displayParticipants(selectedClass) {
+    const data = await fetchSheetData();
+    const container = document.getElementById('participants');
+    container.innerHTML = ''; // 기존 참가자 목록을 비웁니다.
+
+    let count = 0; // 선택된 반의 학생에 대한 순번 카운터입니다.
+
+    data.slice(1).forEach((participantData, index) => { // 첫 번째 행(제목 행)을 제외하고 순회합니다.
+        const participantClass = participantData[0].substring(0, 3); // 참가자 데이터에서 반 정보를 추출합니다.
+        if (selectedClass === 'all' || participantClass === selectedClass) {
+            count++; // 순번을 증가시킵니다.
+            const participantElement = createParticipantElement(participantData, count); // 참가자 요소를 생성합니다.
+            container.appendChild(participantElement); // 생성된 요소를 컨테이너에 추가합니다.
+        }
+    });
 }
+
+
+
+
+
 
 function createParticipantElement(participantData, index) {
     const [serial, name, phone, additionalPhone, photoUrl] = participantData;
@@ -298,18 +319,12 @@ function createParticipantElement(participantData, index) {
     participantDiv.dataset.defaultColor = '#ffffff';
 
     const numberButton = document.createElement('button');
-    numberButton.textContent = index + 1;
+    numberButton.textContent = index; // 여기에서 index는 선택된 반의 학생 중 현재 학생의 순번
     numberButton.classList.add('number-button');
 
     const statusButton = document.createElement('button');
     statusButton.textContent = '터치';
     statusButton.classList.add('status-button');
-
-    const remarkInput = document.createElement('input');
-    remarkInput.type = 'text';
-    remarkInput.placeholder = '관찰일지'; // 수정된 부분
-    remarkInput.classList.add('remark-input');
-    remarkInput.dataset.index = index;
 
     const serialDiv = document.createElement('div');
     serialDiv.textContent = serial;
@@ -324,7 +339,6 @@ function createParticipantElement(participantData, index) {
     participantDiv.appendChild(statusButton);
     participantDiv.appendChild(serialDiv);
     participantDiv.appendChild(nameDiv);
-    participantDiv.appendChild(remarkInput);
 
     if (phone && phone.trim() !== '') {
         const callButton1 = document.createElement('a');
@@ -374,165 +388,196 @@ function createParticipantElement(participantData, index) {
         }
 
         updateSummaryCounts();
-        saveParticipantState(index, { clickCount, status: statusButton.textContent, backgroundColor: participantDiv.style.backgroundColor, remark: remarkInput.value });
+        saveParticipantState(index, { clickCount, status: statusButton.textContent, backgroundColor: participantDiv.style.backgroundColor });
     };
 
     restoreParticipantState(participantDiv, index, (state) => {
         clickCount = state.clickCount;
         statusButton.textContent = state.status;
         participantDiv.style.backgroundColor = state.backgroundColor;
-        if (state.remark) {
-            remarkInput.value = state.remark;
-        }
     });
 
     return participantDiv;
 }
 
-function saveParticipantState(index, state) {
-    const participantsState = JSON.parse(localStorage.getItem('participantsState') || '{}');
-    participantsState[index] = state;
-    localStorage.setItem('participantsState', JSON.stringify(participantsState));
-}
 
-function restoreParticipantState(participantDiv, index, callback) {
-    const participantsState = JSON.parse(localStorage.getItem('participantsState') || '{}');
-    const state = participantsState[index];
-    if (state) {
-        callback(state);
+
+    function saveParticipantState(index, state) {
+        const participantsState = JSON.parse(localStorage.getItem('participantsState') || '{}');
+        participantsState[index] = state;
+        localStorage.setItem('participantsState', JSON.stringify(participantsState));
     }
-}
 
-async function displayParticipants() {
-    const data = await fetchSheetData();
-    const container = document.getElementById('participants');
-    container.innerHTML = '';
-    data.slice(1).forEach((participantData, index) => {
-        const participantElement = createParticipantElement(participantData, index);
-        container.appendChild(participantElement);
-    });
-}
-
-function showDateInfo() {
-    const dateInfoElement = document.getElementById('date-info');
-    const today = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-    const dateString = today.toLocaleDateString('ko-KR', options);
-    dateInfoElement.textContent = dateString;
-}
-
-function updateSummaryCounts() {
-    let attendanceCount = 0;
-    let tardyCount = 0;
-    let absentCount = 0;
-
-    const participantElements = document.querySelectorAll('.participant');
-    participantElements.forEach(element => {
-        const statusButton = element.querySelector('.status-button');
-        if (statusButton.textContent === '출석') {
-            attendanceCount++;
-        } else if (statusButton.textContent === '지각') {
-            tardyCount++;
-        } else if (statusButton.textContent === '결석') {
-            absentCount++;
+    function restoreParticipantState(participantDiv, index, callback) {
+        const participantsState = JSON.parse(localStorage.getItem('participantsState') || '{}');
+        const state = participantsState[index];
+        if (state) {
+            callback(state);
         }
-    });
-
-    const attendanceSummaryButton = document.getElementById('attendance-summary');
-    const tardySummaryButton = document.getElementById('tardy-summary');
-    const absentSummaryButton = document.getElementById('absent-summary');
-    attendanceSummaryButton.textContent = `출석: ${attendanceCount}`;
-    tardySummaryButton.textContent = `지각: ${tardyCount}`;
-    absentSummaryButton.textContent = `결석: ${absentCount}`;
-
-    localStorage.setItem('attendanceCount', attendanceCount);
-    localStorage.setItem('tardyCount', tardyCount);
-    localStorage.setItem('absentCount', absentCount);
-}
-
-function setupButtons() {
-    const allAttendanceButton = document.getElementById('all-attendance-button');
-    const resetButton = document.getElementById('reset-button');
-
-    allAttendanceButton.addEventListener('click', function() {
-        document.querySelectorAll('.participant').forEach((participant, index) => {
-            const statusButton = participant.querySelector('.status-button');
-            if (statusButton.textContent !== '출석') {
-                statusButton.textContent = '출석';
-                participant.style.backgroundColor = 'lightskyblue';
-                saveParticipantState(index, { clickCount: 1, status: '출석', backgroundColor: 'lightskyblue', remark: participant.querySelector('.remark-input').value });
-            }
-        });
-        updateSummaryCounts();
-    });
-
-    resetButton.addEventListener('click', function() {
-        localStorage.clear();
-        location.reload();
-    });
-
-    const copyButton = document.getElementById('copy-button');
-    if (copyButton) {
-        copyButton.addEventListener('click', copyAttendanceStatus);
     }
-}
 
-function copyAttendanceStatus() {
-    const today = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-    const dateString = today.toLocaleDateString('ko-KR', options);
+    
 
-    const eventNameInput = document.getElementById('event-name-input');
-    const eventName = eventNameInput.value;
+    function showDateInfo() {
+        const dateInfoElement = document.getElementById('date-info');
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        const dateString = today.toLocaleDateString('ko-KR', options);
+        dateInfoElement.textContent = dateString;
+    }
 
-    let csvText = `날짜: ${dateString}\t행사명: ${eventName}\n\n`;
-    csvText += "학번\t이름\t출결\t관찰일지\n"; // 수정된 부분
+    function restoreEventData() {
+        const eventNameInput = document.getElementById('event-name-input');
+        const noteInput = document.getElementById('note-input');
 
-    const participantElements = document.querySelectorAll('.participant');
-    participantElements.forEach((element) => {
-        const serialDiv = element.querySelector('.serial-number');
-        const nameDiv = element.querySelector('.name-box');
-        const statusButton = element.querySelector('.status-button');
-        const remarkInput = element.querySelector('.remark-input');
-        const remark = remarkInput.value;
+        const eventName = localStorage.getItem('eventName');
+        const note = localStorage.getItem('note');
 
-        csvText += `${serialDiv.textContent}\t${nameDiv.textContent}\t${statusButton.textContent}\t${remark}\n`;
-    });
+        if (eventName) {
+            eventNameInput.value = eventName;
+        }
+        if (note) {
+            noteInput.value = note;
+        }
 
-    navigator.clipboard.writeText(csvText).then(() => {
-        alert('출결 상태가 클립보드에 복사되었습니다. 엑셀에 붙여넣기를 시도하세요.');
-    }, (err) => {
-        console.error('클립보드 복사 실패:', err);
-    });
-}
+        eventNameInput.addEventListener('input', function() {
+            localStorage.setItem('eventName', this.value);
+        });
+        noteInput.addEventListener('input', function() {
+            localStorage.setItem('note', this.value);
+        });
+    }
 
-function restoreParticipantStates() {
-    const participantElements = document.querySelectorAll('.participant');
-    participantElements.forEach((element, index) => {
-        restoreParticipantState(element, index, (state) => {
+    function updateSummaryCounts() {
+        let attendanceCount = 0;
+        let tardyCount = 0;
+        let absentCount = 0;
+
+        const participantElements = document.querySelectorAll('.participant');
+        participantElements.forEach(element => {
             const statusButton = element.querySelector('.status-button');
-            const remarkInput = element.querySelector('.remark-input');
-            element.style.backgroundColor = state.backgroundColor;
-            statusButton.textContent = state.status;
-            if (state.remark) {
-                remarkInput.value = state.remark;
-            }
-            if (state.clickCount !== 0) {
-                updateSummaryCounts();
+            if (statusButton.textContent === '출석') {
+                attendanceCount++;
+            } else if (statusButton.textContent === '지각') {
+                tardyCount++;
+            } else if (statusButton.textContent === '결석') {
+                absentCount++;
             }
         });
-    });
-}
 
-window.onload = async () => {
-    await displayParticipants();
-    showDateInfo();
-    setupButtons();
-    restoreParticipantStates();
-    updateSummaryCounts();
-};
+        const attendanceSummaryButton = document.getElementById('attendance-summary');
+        const tardySummaryButton = document.getElementById('tardy-summary');
+        const absentSummaryButton = document.getElementById('absent-summary');
+        attendanceSummaryButton.textContent = `출석: ${attendanceCount}`;
+        tardySummaryButton.textContent = `지각: ${tardyCount}`;
+        absentSummaryButton.textContent = `결석: ${absentCount}`;
+
+        localStorage.setItem('attendanceCount', attendanceCount);
+        localStorage.setItem('tardyCount', tardyCount);
+        localStorage.setItem('absentCount', absentCount);
+    }
+
+    function setupButtons() {
+        const allAttendanceButton = document.getElementById('all-attendance-button');
+        const resetButton = document.getElementById('reset-button');
+        const classSelect = document.getElementById('class-select');
+
+        allAttendanceButton.addEventListener('click', function() {
+            document.querySelectorAll('.participant').forEach((participant, index) => {
+                const statusButton = participant.querySelector('.status-button');
+                if (statusButton.textContent !== '출석') {
+                    statusButton.textContent = '출석';
+                    participant.style.backgroundColor = 'lightskyblue';
+                    saveParticipantState(index, { clickCount: 1, status: '출석', backgroundColor: 'lightskyblue' });
+                }
+            });
+            updateSummaryCounts();
+        });
+
+        resetButton.addEventListener('click', function() {
+            localStorage.clear();
+            location.reload();
+        });
+
+        classSelect.addEventListener('change', function() {
+            const selectedClass = this.value;
+            displayParticipants(selectedClass);
+        });
+
+        const copyButton = document.getElementById('copy-button');
+        if (copyButton) {
+            copyButton.addEventListener('click', copyAttendanceStatus);
+        }
+    }
+
+    function copyAttendanceStatus() {
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        const dateString = today.toLocaleDateString('ko-KR', options);
+
+        const eventNameInput = document.getElementById('event-name-input');
+        const eventName = eventNameInput.value;
+
+        const title = `날짜: ${dateString}\n행사명: ${eventName}\n\n`;
+
+        const participantElements = document.querySelectorAll('.participant');
+        let attendanceList = '출석\n';
+        let tardyList = '지각\n';
+        let absentList = '결석\n';
+
+        participantElements.forEach((element) => {
+            const serialDiv = element.querySelector('.serial-number');
+            const nameDiv = element.querySelector('.name-box');
+            const statusButton = element.querySelector('.status-button');
+            const participantInfo = `${serialDiv.textContent}. ${nameDiv.textContent} - ${statusButton.textContent}\n`;
+
+            switch (statusButton.textContent) {
+                case '출석':
+                    attendanceList += participantInfo;
+                    break;
+                case '지각':
+                    tardyList += participantInfo;
+                    break;
+                case '결석':
+                    absentList += participantInfo;
+                    break;
+            }
+        });
+
+        const attendanceText = title + attendanceList + '\n' + tardyList + '\n' + absentList;
+        navigator.clipboard.writeText(attendanceText).then(() => {
+            alert('출결 상태가 클립보드에 복사되었습니다.');
+        }, (err) => {
+            console.error('클립보드 복사 실패:', err);
+        });
+    }
+
+    function restoreParticipantStates() {
+        const participantElements = document.querySelectorAll('.participant');
+        participantElements.forEach((element, index) => {
+            restoreParticipantState(element, index, (state) => {
+                const statusButton = element.querySelector('.status-button');
+                element.style.backgroundColor = state.backgroundColor;
+                statusButton.textContent = state.status;
+                if (state.clickCount !== 0) {
+                    updateSummaryCounts();
+                }
+            });
+        });
+    }
+
+    window.onload = async () => {
+        await displayParticipants('all');
+        showDateInfo();
+        setupButtons();
+        restoreParticipantStates();
+        restoreEventData();
+        updateSummaryCounts();
+    };
 </script>
 
+</script>
 
 </body>
 </html>
+

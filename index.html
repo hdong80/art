@@ -74,15 +74,15 @@
             box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         .observation-textarea {
-        width: 100%;
-        margin-top: 5px;
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-family: inherit;
-        resize: vertical;
-        font-size: 120%; /* Increased font size by 20% */
-    }
+            width: 100%;
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+            resize: vertical;
+            font-size: 120%; /* Increased font size by 20% */
+        }
         .fixed-container {
             position: fixed;
             bottom: 0;
@@ -123,7 +123,7 @@
     </style>
 </head>
 <body>
-    <select id="class-select" style="font-size: 24px; text-align: center; width: 80%; margin: 20px auto; padding: 10px;">
+    <select id="class-select" onchange="onClassSelectChange()" style="font-size: 24px; text-align: center; width: 80%; margin: 20px auto; padding: 10px;">
         <option value="all">모든 반</option>
         <option value="201">201반</option>
         <option value="202">202반</option>
@@ -142,7 +142,6 @@
     </div>
     <div id="participants" class="container"></div>
     <div class="fixed-container">
-        
         <button id="reset-button" class="control-button">리셋</button>
         <button id="attendance-summary" class="summary-button">우수: 0</button>
         <button id="tardy-summary" class="summary-button">매우우수: 0</button>
@@ -150,8 +149,10 @@
         <button id="copy-button" class="control-button">복사</button>
     </div>
     <div style="height: 50px;"></div>
+</body>
 
- <script>
+
+<script>
 async function fetchSheetData() {
     const sheetId = '1JsMGoD5enBE0EtMfihOy_58HcG1dzcDfEtxn2M0Y65Q';
     const apiKey = 'AIzaSyDrClgUbT-0cFoYe4W81dyxikZVbjVlcT8';
@@ -325,7 +326,10 @@ function setupButtons() {
         copyDataToClipboard();
     });
 }
-
+function onClassSelectChange() {
+    const selectedClass = document.getElementById('class-select').value;
+    displayParticipants(selectedClass);
+}
 function copyDataToClipboard() {
     let clipboardText = '';
 
@@ -352,7 +356,7 @@ function copyDataToClipboard() {
             if (bgColor === 'lightskyblue') status = '우수';
             else if (bgColor === 'lightpink') status = '매우우수';
             else if (bgColor === 'red') status = '독보적';
-           clipboardText += `${serial}\t${name}\t${status}\t${observation}\n`;
+            clipboardText += `${serial}\t${name}\t${status}\t${observation}\n`;
         }
     });
 

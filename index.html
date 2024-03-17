@@ -106,21 +106,20 @@
             border: none;
             outline: none;
         }
-       @media only screen and (max-width: 600px) {
-    .container {
-        padding: 5px;
-        flex-direction: column; /* 모바일 화면에서 세로 방향으로 배치되도록 변경 */
-    }
-    .participant {
-        width: 45%; /* 모바일 화면에서 각 상자를 반 너비로 설정하여 2개씩 배열 */
-        margin: 5px; /* 각 상자 사이의 간격 조정 */
-    }
-    .participant div, .participant a {
-        flex-basis: 100%; /* 모바일 화면에서 각 요소가 가득 차도록 설정 */
-        max-width: 100%;
-        text-align: center;
-    }
-}
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 5px;
+            }
+            .participant div, .participant a {
+                flex-basis: 50%;
+                max-width: 50%;
+                text-align: center;
+            }
+            .control-button, .summary-button {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -226,7 +225,7 @@ function createParticipantElement(participantData, index) {
         img.src = photoUrl;
         img.alt = 'Participant Image';
         img.classList.add('participant-img');
-        img.style.width = '60%'; // 사진 크기를  조정
+        img.style.width = '40%'; // 사진 크기를  조정
         participantDiv.appendChild(img);
     }
 

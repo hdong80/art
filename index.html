@@ -81,7 +81,7 @@
             border: 1px solid #ccc;
             font-family: inherit;
             resize: vertical;
-            font-size: 120%; /* Increased font size by 20% */
+            font-size: 120%;
         }
         .fixed-container {
             position: fixed;
@@ -134,6 +134,8 @@
         <option value="207">207반</option>
         <option value="208">208반</option>
     </select>
+   
+    </select>
     <div class="date-info-container">
         <div id="date-info" class="date-info"></div>
     </div>
@@ -150,9 +152,10 @@
     </div>
     <div style="height: 50px;"></div>
 </body>
-
-
+    
 <script>
+let selectedColor = ''; // 선택된 색상을 저장하는 전역 변수
+
 async function fetchSheetData() {
     const sheetId = '1JsMGoD5enBE0EtMfihOy_58HcG1dzcDfEtxn2M0Y65Q';
     const apiKey = 'AIzaSyDrClgUbT-0cFoYe4W81dyxikZVbjVlcT8';
@@ -188,7 +191,6 @@ function createParticipantElement(participantData, index) {
 
     const participantDiv = document.createElement('div');
     participantDiv.classList.add('participant');
-    participantDiv.dataset.defaultColor = '#ffffff';
 
     const serialDiv = document.createElement('div');
     serialDiv.textContent = serial;
@@ -199,6 +201,15 @@ function createParticipantElement(participantData, index) {
     nameDiv.textContent = name || '-';
     nameDiv.classList.add('name-box');
 
+    const colorDropdown = document.createElement('select'); // 드롭다운 메뉴
+    colorDropdown.classList.add('color-dropdown');
+    colorDropdown.innerHTML = `
+        <option value="">색상 선택</option>
+        <option value="lightskyblue">우수</option>
+        <option value="lightpink">매우우수</option>
+        <option value="red">독보적</option>
+    `;
+
     const observationTextarea = document.createElement('textarea');
     observationTextarea.placeholder = '관찰일지';
     observationTextarea.classList.add('observation-textarea');
@@ -206,62 +217,40 @@ function createParticipantElement(participantData, index) {
 
     participantDiv.appendChild(serialDiv);
     participantDiv.appendChild(nameDiv);
+    participantDiv.appendChild(colorDropdown); // 드롭다운 메뉴 추가
     participantDiv.appendChild(observationTextarea);
 
-    if (phone && phone.trim() !== '') {
-        const callButton1 = document.createElement('a');
-        callButton1.href = `tel:${phone}`;
-        callButton1.className = 'call-button';
-        callButton1.textContent = '전화';
-        participantDiv.appendChild(callButton1);
-    }
+    
 
-    if (additionalPhone && additionalPhone.trim() !== '') {
-        const callButton2 = document.createElement('a');
-        callButton2.href = `tel:${additionalPhone}`;
-        callButton2.className = 'call-button';
-        callButton2.textContent = '학부모';
-        participantDiv.appendChild(callButton2);
-    }
+   
 
     if (photoUrl) {
         const img = document.createElement('img');
         img.src = photoUrl;
         img.alt = 'Participant Image';
         img.classList.add('participant-img');
+        img.style.width = '20%'; // 사진 크기를 70%로 조정
         participantDiv.appendChild(img);
     }
 
-    let clickCount = 0;
-    participantDiv.onclick = () => {
-        clickCount++;
-        switch (clickCount) {
-            case 1:
-                participantDiv.style.backgroundColor = 'lightskyblue';
-                break;
-            case 2:
-                participantDiv.style.backgroundColor = 'lightpink';
-                break;
-            case 3:
-                participantDiv.style.backgroundColor = 'red';
-                break;
-            case 4:
-                clickCount = 0;
-                participantDiv.style.backgroundColor = participantDiv.dataset.defaultColor;
-                break;
-        }
-
+    // 각 참가자를 클릭하면 색상이 선택한 색상으로 변경됨
+    colorDropdown.addEventListener('change', () => {
+        applyColor(participantDiv, colorDropdown.value);
         updateSummaryCounts();
-        saveParticipantState(index, { clickCount, backgroundColor: participantDiv.style.backgroundColor, observation: observationTextarea.value });
-    };
+        saveParticipantState(index, { backgroundColor: colorDropdown.value, observation: observationTextarea.value });
+    });
 
+    // 복원 함수를 호출하여 참가자의 상태를 복원
     restoreParticipantState(participantDiv, index, (state) => {
-        clickCount = state.clickCount;
-        participantDiv.style.backgroundColor = state.backgroundColor;
+        applyColor(participantDiv, state.backgroundColor || '');
         observationTextarea.value = state.observation || '';
     });
 
     return participantDiv;
+}
+
+function applyColor(participantDiv, color) {
+    participantDiv.style.backgroundColor = color;
 }
 
 function saveParticipantState(index, state) {
@@ -326,10 +315,12 @@ function setupButtons() {
         copyDataToClipboard();
     });
 }
+
 function onClassSelectChange() {
     const selectedClass = document.getElementById('class-select').value;
     displayParticipants(selectedClass);
 }
+
 function copyDataToClipboard() {
     let clipboardText = '';
 
@@ -346,11 +337,12 @@ function copyDataToClipboard() {
     // Add participant data
     document.querySelectorAll('.participant').forEach((participant, index) => {
         const observationTextarea = participant.querySelector('.observation-textarea');
+        const colorDropdown = participant.querySelector('.color-dropdown');
         // Check if the observation textarea has text
-        if (observationTextarea.value.trim() !== '') {
+        if (observationTextarea.value.trim() !== '' && colorDropdown.value) {
             const serial = participant.querySelector('.serial-number').textContent;
             const name = participant.querySelector('.name-box').textContent;
-            const bgColor = participant.style.backgroundColor;
+            const bgColor = colorDropdown.value;
             const observation = observationTextarea.value;
             let status = '미정';
             if (bgColor === 'lightskyblue') status = '우수';
@@ -373,11 +365,25 @@ window.onload = async () => {
     showDateInfo();
     await displayParticipants('all');
     setupButtons();
+    restoreTextFromLocalStorage(); // 로컬 스토리지에서 데이터를 가져와 복원하는 함수 호출
 };
+
+// 각 참가자의 관찰일지를 로컬 스토리지에서 가져와 복원하는 함수
+function restoreTextFromLocalStorage() {
+    const observationTextareas = document.querySelectorAll('.observation-textarea');
+    observationTextareas.forEach(textarea => {
+        const index = textarea.dataset.index;
+        const savedText = localStorage.getItem(`observation_${index}`);
+        if (savedText) {
+            textarea.value = savedText;
+        }
+        // 각 textarea의 내용이 변경될 때마다 로컬 스토리지에 저장
+        textarea.addEventListener('input', () => {
+            localStorage.setItem(`observation_${index}`, textarea.value);
+        });
+    });
+}
+
 </script>
-
-
-
-
 </body>
 </html>

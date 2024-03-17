@@ -315,37 +315,40 @@ function onClassSelectChange() {
 }
 
 function copyDataToClipboard() {
-    let clipboardText = '';
+    let clipboardText = '일자\t번호\t이름\t상태\t메모\t평가\n'; // 헤더 추가
 
-    // Add today's date
-    const today = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-    const dateString = today.toLocaleDateString('ko-KR', options);
-    clipboardText += ` ${dateString}\n\n`;
+    const participants = document.querySelectorAll('.participant'); // 모든 학생 요소 선택
+    participants.forEach(participant => {
+        const serial = participant.querySelector('.serial-number')?.textContent.trim() ?? ''; // 학생 번호
+        const name = participant.querySelector('.name-box')?.textContent.trim() ?? ''; // 학생 이름
+        const observation = participant.querySelector('.observation-textarea')?.value.trim() ?? ''; // 관찰 메모
+        const colorDropdown = participant.querySelector('.color-dropdown'); // 색상 드롭다운 선택
+        const evaluation = colorDropdown.options[colorDropdown.selectedIndex]?.text.trim() ?? ''; // 평가 (드롭다운에서 선택된 값)
 
-    // Add event name
-    const eventName = document.getElementById('event-name-input').value.trim();
-    clipboardText += ` ${eventName}\n\n`;
+        // 상태 결정 로직 (색상에 따라)
+        let status = '';
+        switch (participant.style.backgroundColor) {
+            case 'lightskyblue':
+                status = '우수';
+                break;
+            case 'lightpink':
+                status = '매우우수';
+                break;
+            case 'red':
+                status = '독보적';
+                break;
+            default:
+                status = '미정';
+                break;
+        }
 
-    // Add participant data
-    document.querySelectorAll('.participant').forEach((participant, index) => {
-        const observationTextarea = participant.querySelector('.observation-textarea');
-        const colorDropdown = participant.querySelector('.color-dropdown');
-        // Check if the observation textarea has text
-        if (observationTextarea.value.trim() !== '' && colorDropdown.value) {
-            const serial = participant.querySelector('.serial-number').textContent;
-            const name = participant.querySelector('.name-box').textContent;
-            const bgColor = colorDropdown.value;
-            const observation = observationTextarea.value;
-            let status = '미정';
-            if (bgColor === 'lightskyblue') status = '우수';
-            else if (bgColor === 'lightpink') status = '매우우수';
-            else if (bgColor === 'red') status = '독보적';
-            clipboardText += `${serial}\t${name}\t${status}\t${observation}\n`;
+        // 데이터가 있는 경우에만 문자열에 추가
+        if (name && evaluation) {
+            clipboardText += `${new Date().toLocaleDateString('ko-KR')}\t${serial}\t${name}\t${status}\t${observation}\t${evaluation}\n`;
         }
     });
 
-    // Copy to clipboard
+    // 클립보드에 복사
     navigator.clipboard.writeText(clipboardText).then(() => {
         alert('클립보드에 복사되었습니다.');
     }, (err) => {
@@ -353,6 +356,7 @@ function copyDataToClipboard() {
         alert('클립보드 복사에 실패했습니다.');
     });
 }
+
 
 // 각 참가자의 관찰일지를 로컬 스토리지에서 가져와 복원하는 함수
 function restoreTextFromLocalStorage() {

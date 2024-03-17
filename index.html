@@ -19,26 +19,26 @@
             background-color: #f0f8ff;
         }
         .container {
-            width: 30%;
-            max-width: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .participant {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 8px;
-            width: 100%;
-            cursor: pointer;
-            position: relative;
-        }
+    width: 90%;
+    max-width: 450px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+text-align: center; 
+}
+
+
+.participant {
+    width: calc(33.33% - 16px); /* 한 줄에 3개의 요소가 들어가도록 설정하고 간격을 제거합니다. */
+    margin: 8px; /* 각 요소의 마진을 설정합니다. */
+    box-sizing: border-box; /* 요소의 패딩과 테두리를 요소의 크기에 포함시킵니다. */
+    background-color: lightyellow; /* 연한 노란색 배경을 설정합니다. */
+    border: 1px solid #ddd; /* 테두리를 추가합니다. */
+    border-radius: 8px; /* 테두리의 둥글기를 설정합니다. */
+    padding: 8px; /* 내부 여백을 추가합니다. */
+}
         .participant div, .participant a {
             margin: 5px;
             white-space: nowrap;
@@ -63,7 +63,7 @@
         .call-button, .reset-button, .capture-button {
             background-color: #ffff99;
             color: black;
-            padding: 6px 12px;
+            padding: 1px 3px;
             text-decoration: none;
             border-radius: 8px;
             text-align: center;
@@ -74,7 +74,7 @@
             box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         .observation-textarea {
-            width: 100%;
+            width: 90%;
             margin-top: 5px;
             padding: 5px;
             border-radius: 5px;
@@ -96,6 +96,10 @@
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
             z-index: 100;
         }
+        .fixed-container button {
+    font-size: 14px; /* 원하는 글자 크기로 설정합니다. */
+    padding: 6px 12px; /* 원하는 패딩으로 설정합니다. */
+}
         .control-button, .summary-button {
             background-color: #ffa07a;
             padding: 12px 24px;
@@ -107,19 +111,12 @@
             outline: none;
         }
         @media only screen and (max-width: 600px) {
-            .container {
-                padding: 5px;
-            }
-            .participant div, .participant a {
-                flex-basis: 50%;
-                max-width: 50%;
-                text-align: center;
-            }
-            .control-button, .summary-button {
-                font-size: 12px;
-                padding: 4px 8px;
-            }
-        }
+    
+    }
+    
+
+
+}
     </style>
 </head>
 <body>
@@ -225,7 +222,7 @@ function createParticipantElement(participantData, index) {
         img.src = photoUrl;
         img.alt = 'Participant Image';
         img.classList.add('participant-img');
-        img.style.width = '70%'; // 사진 크기를  조정
+        img.style.width = '60%'; // 사진 크기를 70%로 조정
         participantDiv.appendChild(img);
     }
 

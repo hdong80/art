@@ -27,40 +27,24 @@
   }
 
   body {
-    margin: 0;
-    padding: 24px 14px 64px;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--gothic);
-    font-size: 15px;
-    line-height: 1.65;
-    word-break: keep-all;
-    overflow-wrap: break-word;
+    margin: 0; padding: 24px 14px 64px;
+    background: var(--bg); color: var(--ink);
+    font-family: var(--gothic); font-size: 15px; line-height: 1.6;
+    word-break: keep-all; overflow-wrap: break-word;
     -webkit-text-size-adjust: 100%;
   }
 
   .stack { display: flex; flex-direction: column; gap: 24px; align-items: center; }
-
   .sheet {
-    width: 100%;
-    max-width: 760px;
-    box-sizing: border-box;
-    background: var(--sheet);
-    border: 1px solid var(--rule);
-    box-shadow: var(--shadow);
-    padding: 38px 42px 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+    width: 100%; max-width: 760px; box-sizing: border-box;
+    background: var(--sheet); border: 1px solid var(--rule); box-shadow: var(--shadow);
+    padding: 38px 42px 40px; display: flex; flex-direction: column; gap: 22px;
   }
 
   /* 머리말 */
   .head { display: flex; flex-direction: column; gap: 9px; }
   .head .sub { font-size: 13px; color: var(--ink-faint); font-weight: 500; }
-  h1 {
-    font-size: 25px; font-weight: 700; margin: 0; letter-spacing: -.02em;
-    line-height: 1.35; text-wrap: balance;
-  }
+  h1 { font-size: 25px; font-weight: 700; margin: 0; letter-spacing: -.02em; line-height: 1.3; }
   .head p.lead { margin: 0; color: var(--ink-soft); font-size: 14px; }
 
   .nameplate { display: flex; border: 1px solid var(--rule-strong); flex-wrap: wrap; margin-top: 4px; }
@@ -111,7 +95,7 @@
   table.plan td:first-child, table.plan tfoot th { white-space: nowrap; font-weight: 600; }
   table.plan td:last-child, table.plan tfoot td { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
   table.plan tfoot th, table.plan tfoot td { border-bottom: 0; border-top: 1.5px solid var(--rule-strong); }
-  .box { display: inline-block; width: 13px; height: 13px; border: 1px solid var(--rule-strong); }
+  .box { display: inline-block; width: 13px; height: 13px; border: 1px solid var(--rule-strong); flex: none; }
 
   /* 정리 박스 */
   .summary { border: 1px solid var(--rule-strong); padding: 13px 15px; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
@@ -127,6 +111,39 @@
   ul.notice { margin: 0; padding-left: 17px; font-size: 13.5px; display: flex; flex-direction: column; gap: 5px; color: var(--ink-soft); }
   ul.notice b { color: var(--ink); font-weight: 600; }
 
+  .callout { border: 1.5px solid var(--rule-strong); padding: 12px 15px; font-size: 13.5px; }
+  .callout p { margin: 0; }
+  .callout b { font-weight: 700; }
+
+  /* ── 교사용 참고면 ── */
+  .artwork { display: grid; grid-template-columns: minmax(0, 42%) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .artwork > figure { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .artwork svg { width: 100%; height: auto; display: block; border: 1px solid var(--rule-strong); background: var(--sheet); }
+  .artwork figcaption { font-size: 11.5px; color: var(--ink-faint); line-height: 1.45; }
+  ol.spots { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; font-size: 13px; counter-reset: s; }
+  ol.spots li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; counter-increment: s; }
+  ol.spots li::before {
+    content: counter(s); grid-column: 1; grid-row: 1;
+    border: 1px solid var(--rule-strong); width: 18px; height: 18px;
+    display: grid; place-items: center; font-size: 11px; font-weight: 700;
+  }
+  ol.spots b { grid-column: 2; font-weight: 700; }
+  ol.spots span { grid-column: 2; color: var(--ink-soft); }
+
+  .runsheet { display: flex; flex-direction: column; }
+  .runsheet > div {
+    display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px;
+    padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 13.5px;
+  }
+  .runsheet > div:last-child { border-bottom: 0; }
+  .runsheet time { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 12.5px; color: var(--ink-soft); }
+  .runsheet b { display: block; font-weight: 600; }
+  .runsheet p { margin: 2px 0 0; color: var(--ink-soft); font-size: 13px; }
+  ul.plain { margin: 0; padding-left: 17px; font-size: 13.5px; display: flex; flex-direction: column; gap: 6px; color: var(--ink-soft); }
+  ul.plain b { color: var(--ink); font-weight: 600; }
+  .asks { background: var(--field); border: 1px solid var(--rule); padding: 12px 15px; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
+  .asks p { margin: 0; }
+
   footer.tag {
     font-size: 11.5px; color: var(--ink-faint); display: flex; justify-content: space-between;
     gap: 12px; border-top: 1px solid var(--rule); padding-top: 9px; margin-top: auto;
@@ -135,32 +152,49 @@
   @media (max-width: 680px) {
     .sheet { padding: 24px 18px 26px; }
     h1 { font-size: 21px; }
-    .pair { grid-template-columns: 1fr; }
+    .pair, .artwork { grid-template-columns: 1fr; }
   }
 
   @media print {
     :root {
       --bg: #FFFFFF; --sheet: #FFFFFF; --ink: #000000; --ink-soft: #2B2B2B;
-      --ink-faint: #565656; --rule: #9A9A9A; --rule-strong: #000000;
+      --ink-faint: #4F4F4F; --rule: #8E8E8E; --rule-strong: #000000;
       --field: #FFFFFF; --shadow: none;
     }
-    @page { size: A4; margin: 13mm 12mm; }
-    body { padding: 0; font-size: 9.6pt; line-height: 1.44; }
+    @page { size: A4; margin: 12mm 14mm; }
+    body { padding: 0; font-size: 9.5pt; line-height: 1.4; }
     .stack { gap: 0; }
-    .sheet { max-width: none; border: 0; box-shadow: none; padding: 0; gap: 10px; break-after: page; }
+
+    /* 한 면이 A4 인쇄 영역을 정확히 채우도록 */
+    .sheet {
+      max-width: none; border: 0; box-shadow: none; padding: 0;
+      height: 272mm; box-sizing: border-box;
+      gap: 5mm; break-after: page; overflow: hidden;
+    }
     .sheet:last-child { break-after: auto; }
-    .block, table { break-inside: avoid; }
-    .block { gap: 7px; }
-    .block > header { padding-bottom: 5px; }
+    .head, .wrap, .callout, .artwork, footer.tag { flex: none; }
+    .block { flex: 1 1 auto; gap: 3mm; }
+    .block > header { padding-bottom: 1.5mm; }
     .block > header h2, .num { font-size: 13pt; }
-    h1 { font-size: 17pt; }
-    .head { gap: 6px; }
-    .field { padding: 9px 11px 11px; gap: 6px; }
-    .lines i { height: 7mm; }
-    th, td { padding: 6px 9px; }
-    td.write i { height: 7.5mm; }
-    .summary { padding: 10px 12px; }
-    footer.tag { font-size: 8.6pt; padding-top: 7px; }
+    h1 { font-size: 16.5pt; }
+    .head { gap: 2mm; }
+    .head .sub, .head p.lead { font-size: 9pt; }
+    .nameplate div { padding: 2mm 3mm 2.5mm; }
+    .nameplate i { height: 5mm; }
+    .field { padding: 2.5mm 3.5mm 3mm; gap: 1.5mm; }
+    .lines i { height: 6.6mm; }
+    th, td { padding: 2mm 2.5mm; }
+    td.write i { height: 6.2mm; }
+    .summary { padding: 2.5mm 3.5mm; }
+    .callout { padding: 2.5mm 3.5mm; }
+    ol.rules { gap: 1.6mm; }
+    ol.spots { gap: 1.6mm; font-size: 8.7pt; }
+    .artwork { grid-template-columns: minmax(0, 36%) minmax(0, 1fr); gap: 5mm; }
+    .artwork figcaption { font-size: 8pt; }
+    .runsheet > div { padding: 1.8mm 0; }
+    .asks { padding: 2.5mm 3.5mm; gap: 1.2mm; font-size: 9.2pt; }
+    ul.plain { gap: 1.2mm; font-size: 9.2pt; }
+    footer.tag { padding-top: 2mm; font-size: 8.6pt; }
   }
 </style>
 
@@ -278,7 +312,7 @@
       <p class="guide">아래 틀을 그대로 씁니다. 뒤 칸에는 <strong>작품에서 눈으로 확인할 수 있는 것</strong>을 써야 합니다. “그냥”이나 “느낌상”은 근거가 아닙니다.</p>
       <div class="field">
         <b>나는 이 작품이 __________________ 하다고 생각한다.<br>왜냐하면 작품 속의 __________________ 때문이다.</b>
-        <div class="lines"><i></i><i></i><i></i></div>
+        <div class="lines"><i></i><i></i></div>
       </div>
     </div>
 
@@ -289,13 +323,111 @@
         <li><b>다른 해석은 끝까지 듣는다.</b><span>내 생각과 다른 의견이 나오는 순간이 이 수업에서 가장 중요합니다.</span></li>
         <li><b>본 것은 기록으로 남긴다.</b><span>감상은 기억에 남지 않습니다. 기록한 만큼이 학기말의 내 점수이자 실력입니다.</span></li>
       </ol>
-      <div class="field">
-        <b>다음 시간 · 준비물</b>
-        <div class="lines"><i></i></div>
+      <div class="callout">
+        <p><b>기본 준비물</b> — 이 수업은 매시간 보고, 쓰고, 기록합니다. <b>필기도구는 항상 가지고 다니세요.</b> 그 밖의 재료는 과제를 시작할 때 따로 안내합니다.</p>
       </div>
     </div>
 
     <footer class="tag"><span>미술 감상과 비평 · 2학기 1주차</span><span>2 / 2</span></footer>
+  </section>
+
+  <!-- ── 교사용 참고면 ── -->
+  <section class="sheet">
+    <div class="head">
+      <p class="sub">교사용 참고 · 학생 배부 안 함</p>
+      <h1>3초·3분 감상에 쓸 작품</h1>
+      <p class="lead"><b>얀 반 에이크 〈아르놀피니 부부의 초상〉</b> 1434년 · 오크 패널에 유채 · 82.2 × 60 cm · 런던 내셔널 갤러리 · 저작권 만료</p>
+    </div>
+
+    <div class="artwork">
+      <figure>
+        <svg viewBox="0 0 300 400" role="img" aria-label="아르놀피니 부부의 초상 화면 배치 지도">
+          <g fill="none" stroke="currentColor" stroke-width="1.4">
+            <!-- 방 -->
+            <rect x="8" y="8" width="284" height="384"/>
+            <line x1="8" y1="300" x2="292" y2="300"/>
+            <!-- 창문 -->
+            <rect x="20" y="40" width="54" height="86"/>
+            <line x1="47" y1="40" x2="47" y2="126"/>
+            <line x1="20" y1="83" x2="74" y2="83"/>
+            <!-- 침대 -->
+            <path d="M212 120 L284 120 L284 300 L212 300 Z"/>
+            <path d="M212 120 q36 -14 72 0"/>
+            <!-- 거울 -->
+            <circle cx="150" cy="150" r="24"/>
+            <circle cx="150" cy="150" r="15"/>
+            <!-- 서명 -->
+            <path d="M104 112 q46 -10 92 0" stroke-dasharray="5 4"/>
+            <!-- 샹들리에 -->
+            <line x1="150" y1="8" x2="150" y2="46"/>
+            <path d="M112 62 q38 -24 76 0"/>
+            <path d="M112 62 q38 22 76 0"/>
+            <line x1="150" y1="46" x2="150" y2="62"/>
+            <line x1="150" y1="46" x2="150" y2="34"/>
+            <!-- 인물 (남) -->
+            <ellipse cx="96" cy="196" rx="19" ry="23"/>
+            <path d="M70 300 L70 232 q26 -18 52 0 L122 300 Z"/>
+            <path d="M96 240 L96 285"/>
+            <!-- 인물 (여) -->
+            <ellipse cx="204" cy="200" rx="18" ry="22"/>
+            <path d="M170 300 q6 -66 34 -70 q28 4 34 70 Z"/>
+            <path d="M186 262 q18 -12 36 0"/>
+            <!-- 강아지 -->
+            <ellipse cx="150" cy="334" rx="22" ry="12"/>
+            <circle cx="172" cy="326" r="7"/>
+            <line x1="140" y1="344" x2="140" y2="356"/>
+            <line x1="160" y1="344" x2="160" y2="356"/>
+            <!-- 나막신 -->
+            <path d="M30 344 q16 -8 26 2 l-2 12 q-14 6 -24 -2 Z"/>
+            <path d="M62 356 q14 -7 24 2 l-2 10 q-13 6 -22 -2 Z"/>
+            <!-- 오렌지 -->
+            <circle cx="34" cy="150" r="7"/>
+            <circle cx="50" cy="154" r="7"/>
+            <circle cx="42" cy="164" r="7"/>
+          </g>
+          <g font-family="inherit" font-size="15" font-weight="700" fill="currentColor" text-anchor="middle">
+            <circle cx="150" cy="72" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="150" y="77">1</text>
+            <circle cx="150" cy="150" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="150" y="155">2</text>
+            <circle cx="216" cy="104" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="216" y="109">3</text>
+            <circle cx="150" cy="366" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="150" y="371">4</text>
+            <circle cx="76" cy="368" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="76" y="373">5</text>
+            <circle cx="66" cy="176" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="66" y="181">6</text>
+            <circle cx="204" cy="248" r="11" fill="var(--sheet)" stroke="currentColor" stroke-width="1.4"/><text x="204" y="253">7</text>
+          </g>
+        </svg>
+        <figcaption><b>원본 이미지</b> 위키미디어 커먼즈 <i>Van Eyck - Arnolfini Portrait.jpg</i> 또는 런던 내셔널 갤러리 누리집에서 고해상 파일을 받아 투사하세요. 위 그림은 어디를 가리킬지 표시한 배치 지도입니다.</figcaption>
+      </figure>
+
+      <ol class="spots">
+        <li><b>샹들리에의 촛불 한 개</b><span>여섯 자리 중 딱 하나만 켜져 있고, 그것도 환한 낮입니다. 왜 켰을까요.</span></li>
+        <li><b>뒤쪽 볼록 거울</b><span>방 전체가 비칩니다. 그리고 그림에는 없는 <b>두 사람</b>이 문가에 서 있습니다. 학생들이 3분 감상에서 가장 늦게 발견하는 지점입니다.</span></li>
+        <li><b>거울 위 라틴어 글씨</b><span>“얀 반 에이크가 여기 있었다, 1434.” 화가의 이름을 서명이 아니라 <b>증인의 진술처럼</b> 적어 두었습니다.</span></li>
+        <li><b>강아지</b><span>충실함의 상징. 부부의 초상에 자주 등장합니다.</span></li>
+        <li><b>벗어 놓은 나막신</b><span>둘 다 신발을 벗고 있습니다. 이 방을 특별한 장소로 본 것이라는 해석이 있습니다.</span></li>
+        <li><b>창가의 오렌지</b><span>북유럽에서 오렌지는 수입 과일이었습니다. 값비싼 물건을 일부러 놓아 둔 것입니다.</span></li>
+        <li><b>여성의 부푼 배</b><span>임신이라고 보기 쉽지만, 당시 유행한 옷의 모양이라는 설명이 우세합니다. <b>“보이는 것”과 “아는 것”이 다르다</b>는 걸 보여 주기에 좋은 지점입니다.</span></li>
+      </ol>
+    </div>
+
+    <div class="block">
+      <header><h2>이 작품을 고른 이유와 진행</h2></header>
+      <ul class="plain">
+        <li><b>3초에 절대 다 안 담깁니다.</b> 3초 뒤 학생들은 “두 사람, 초록 옷, 어두운 방” 정도만 적습니다. 3분을 주면 거울·촛불·신발·강아지가 쏟아져 나옵니다. 두 목록의 차이가 그대로 오늘의 결론이 됩니다.</li>
+        <li><b>이야기가 계속 나옵니다.</b> 거울 속 두 사람이 누구인지, 결혼식 장면인지 아닌지, 왜 촛불이 하나인지 — 미술사학자들도 아직 결론을 내지 못했습니다. “정답이 없지만 근거는 있다”를 설명하기에 이만한 작품이 없습니다.</li>
+        <li><b>3초 노출 방법</b> — 화면을 띄우고 “셋, 둘, 하나”를 센 뒤 즉시 가립니다(윈도우+D). 미리 한 번 연습해 두세요.</li>
+        <li><b>순서</b> — 3초 노출 → 쓰기 2분 → 3분 감상(침묵 유지) → 쓰기 3분 → 짝과 비교 2분. 침묵 3분은 길게 느껴지지만 줄이지 않습니다.</li>
+        <li><b>이야기는 3분 감상이 끝난 뒤에</b> 풀어 줍니다. 먼저 말해 버리면 학생들은 자기 눈으로 찾지 않습니다. 학생이 발견한 것부터 말하게 하고, 아무도 못 본 것만 교사가 짚어 줍니다.</li>
+      </ul>
+      <div class="asks">
+        <p>“3초 동안 본 것과 3분 동안 본 것 중, 어느 쪽이 이 작품에 더 가까울까?”</p>
+        <p>“거울 속에 사람이 두 명 있어. 이 방에 몇 명이 있는 걸까?”</p>
+        <p>“화가는 왜 자기 이름을 ‘여기 있었다’라고 썼을까?”</p>
+        <p>“같은 그림을 보고 둘이 다르게 말했어. 둘 다 맞을 수 있을까?”</p>
+      </div>
+      <p class="guide"><b>대체 작품</b> — 한국 작품으로 하려면 김홍도 〈씨름〉(《단원 풍속도첩》)이 좋습니다. 씨름꾼이 아니라 구경꾼을 보게 하면 됩니다. 딴 데 보는 사람, 엿 파는 아이, 뒤집힌 신발, 부채로 얼굴을 가린 사람이 3분 감상에서 차례로 나옵니다.</p>
+    </div>
+
+    <footer class="tag"><span>교사용 참고 · 학생 배부 안 함</span><span>작품 안내</span></footer>
   </section>
 
 </div>

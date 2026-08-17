@@ -49,6 +49,8 @@
     font-family: var(--gothic);
     font-size: 15px;
     line-height: 1.65;
+    word-break: keep-all;
+    overflow-wrap: break-word;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -64,15 +66,12 @@
     padding: 38px 42px 40px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 22px;
   }
 
   /* 머리말 */
-  .head { display: flex; flex-direction: column; gap: 10px; }
-  .head .sub {
-    font-size: 13px; color: var(--ink-faint); font-weight: 500;
-    display: flex; gap: 8px; flex-wrap: wrap;
-  }
+  .head { display: flex; flex-direction: column; gap: 9px; }
+  .head .sub { font-size: 13px; color: var(--ink-faint); font-weight: 500; }
   h1 {
     font-size: 25px; font-weight: 700; margin: 0; letter-spacing: -.02em;
     line-height: 1.35; text-wrap: balance;
@@ -89,12 +88,12 @@
   .nameplate i { display: block; height: 15px; border-bottom: 1px solid var(--rule); }
 
   /* 문항 블록 */
-  .block { display: flex; flex-direction: column; gap: 11px; }
+  .block { display: flex; flex-direction: column; gap: 10px; }
   .block > header {
     display: flex; gap: 10px; align-items: baseline;
     border-bottom: 1.5px solid var(--rule-strong); padding-bottom: 6px;
   }
-  .block > header h2 { font-size: 17px; font-weight: 700; margin: 0; flex: 1; letter-spacing: -.01em; }
+  .block > header h2 { font-size: 17px; font-weight: 700; margin: 0; flex: 1; letter-spacing: -.01em; min-width: 0; }
   .num { font-weight: 700; font-size: 17px; }
   .time { font-size: 12px; color: var(--ink-faint); font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .guide { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
@@ -103,18 +102,19 @@
   /* 쓰기 칸 */
   .field {
     background: var(--field); border: 1px solid var(--rule);
-    padding: 11px 13px 13px; display: flex; flex-direction: column; gap: 7px;
+    padding: 11px 13px 13px; display: flex; flex-direction: column; gap: 7px; min-width: 0;
   }
   .field > b { font-size: 13.5px; font-weight: 600; }
   .lines { display: flex; flex-direction: column; }
   .lines i { display: block; height: 25px; border-bottom: 1px solid var(--rule); }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pair > * { min-width: 0; }
 
   /* 빙고 */
   .bingo { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rule-strong); }
   .bingo div {
     border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-    padding: 9px 10px 7px; min-height: 72px; font-size: 12.5px; line-height: 1.45;
+    padding: 9px 10px 7px; min-height: 70px; min-width: 0; font-size: 12.5px; line-height: 1.45;
     display: flex; flex-direction: column; justify-content: space-between; gap: 7px;
   }
   .bingo div:nth-child(3n) { border-right: 0; }
@@ -132,27 +132,39 @@
   tbody th { font-weight: 600; white-space: nowrap; width: 1%; }
   td.write { background: var(--field); }
   td.write i { display: block; height: 20px; border-bottom: 1px solid var(--rule); }
-  table.view td:first-child { font-weight: 600; white-space: nowrap; }
-  table.view td:last-child { text-align: center; width: 1%; }
+  .choices { display: flex; flex-wrap: wrap; gap: 5px 18px; font-size: 13px; }
+  .choices > span { display: flex; align-items: center; gap: 6px; }
+  .choices em { font-style: normal; color: var(--ink-faint); font-size: 12px; }
+  table.plan td:first-child, table.plan tfoot th { white-space: nowrap; font-weight: 600; }
+  table.plan td:last-child, table.plan tfoot td { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  table.plan tfoot th, table.plan tfoot td { border-bottom: 0; border-top: 1.5px solid var(--rule-strong); }
   .box { display: inline-block; width: 13px; height: 13px; border: 1px solid var(--rule-strong); }
 
   /* 정리 박스 */
   .summary { border: 1px solid var(--rule-strong); padding: 13px 15px; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
   .summary p { margin: 0; }
-  .summary p b { font-weight: 700; }
 
-  /* 약속 */
+  /* 번호 목록 */
   ol.rules { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; counter-reset: r; font-size: 13.5px; }
-  ol.rules li { display: grid; grid-template-columns: 20px 1fr; gap: 9px; counter-increment: r; }
-  ol.rules li::before { content: counter(r) "."; font-weight: 700; }
-  ol.rules b { display: block; font-weight: 600; }
-  ol.rules span { color: var(--ink-soft); }
+  ol.rules li { display: grid; grid-template-columns: 19px 1fr; counter-increment: r; }
+  ol.rules li::before { content: counter(r) "."; font-weight: 700; grid-column: 1; grid-row: 1; }
+  ol.rules b { grid-column: 2; font-weight: 600; }
+  ol.rules span { grid-column: 2; color: var(--ink-soft); }
+
+  ul.notice { margin: 0; padding-left: 17px; font-size: 13.5px; display: flex; flex-direction: column; gap: 5px; color: var(--ink-soft); }
+  ul.notice b { color: var(--ink); font-weight: 600; }
 
   /* 제출 카드 */
   .tear { border-top: 1.5px dashed var(--rule-strong); padding-top: 18px; margin-top: 2px; }
   .tear .cap { font-size: 12px; color: var(--ink-faint); margin: 0 0 11px; }
   .card { border: 1px solid var(--rule-strong); padding: 15px 17px 17px; display: flex; flex-direction: column; gap: 11px; }
   .card h3 { font-size: 15px; font-weight: 700; margin: 0; }
+  .card h3 span { font-size: 12.5px; font-weight: 500; color: var(--ink-faint); }
+  .qa { display: flex; flex-direction: column; gap: 0; font-size: 13.5px; }
+  .qa div { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: end; padding: 6px 0; border-bottom: 1px solid var(--rule); }
+  .qa div:last-child { border-bottom: 0; }
+  .qa span { min-width: 0; }
+  .qa i { display: block; height: 18px; border-bottom: 1px solid var(--rule); }
 
   /* 교사용 */
   .runsheet { display: flex; flex-direction: column; }
@@ -162,6 +174,7 @@
   }
   .runsheet div:last-child { border-bottom: 0; }
   .runsheet time { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 12.5px; color: var(--ink-soft); }
+  .runsheet > div > span { min-width: 0; }
   .runsheet b { display: block; font-weight: 600; }
   .runsheet p { margin: 2px 0 0; color: var(--ink-soft); font-size: 13px; }
   ul.plain { margin: 0; padding-left: 17px; font-size: 13.5px; display: flex; flex-direction: column; gap: 6px; color: var(--ink-soft); }
@@ -174,11 +187,12 @@
     gap: 12px; border-top: 1px solid var(--rule); padding-top: 9px;
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 680px) {
     .sheet { padding: 24px 18px 26px; }
     h1 { font-size: 21px; }
-    .pair, .bingo { grid-template-columns: 1fr; }
+    .pair, .bingo, .qa div { grid-template-columns: 1fr; }
     .bingo div { border-right: 0; min-height: 0; }
+    .runsheet div { grid-template-columns: 1fr; gap: 2px; }
   }
 
   @media print {
@@ -187,14 +201,41 @@
       --ink-faint: #565656; --rule: #9A9A9A; --rule-strong: #000000;
       --field: #FFFFFF; --band: #FFFFFF; --shadow: none;
     }
-    @page { size: A4; margin: 13mm 12mm; }
-    body { padding: 0; font-size: 10.5pt; line-height: 1.5; }
+    @page { size: A4; margin: 12mm 12mm; }
+    body { padding: 0; font-size: 9.2pt; line-height: 1.38; }
     .stack { gap: 0; }
-    .sheet { max-width: none; border: 0; box-shadow: none; padding: 0; gap: 14px; break-after: page; }
+    .sheet { max-width: none; border: 0; box-shadow: none; padding: 0; gap: 6px; break-after: page; }
     .sheet:last-child { break-after: auto; }
     .block, .card, .tear, table, .bingo { break-inside: avoid; }
-    h1 { font-size: 18pt; }
-    .lines i { height: 8.5mm; }
+    .block { gap: 5px; }
+    .block > header { padding-bottom: 4px; }
+    .block > header h2, .num { font-size: 12.5pt; }
+    h1 { font-size: 15.5pt; }
+    .head { gap: 3px; }
+    .head p.lead, .head .sub { font-size: 9pt; }
+    .guide, .summary, ol.rules, ul.notice, ul.plain, .qa, table, .asks, .runsheet div { font-size: 9.2pt; }
+    .field { padding: 6px 8px 8px; gap: 3px; }
+    .field > b, .card h3 { font-size: 9.2pt; }
+    .lines i { height: 6.1mm; }
+    th, td { padding: 3px 6px; font-size: 8.9pt; }
+    td.write i { height: 5.2mm; }
+    .summary { padding: 8px 10px; gap: 3px; }
+    .nameplate div { padding: 5px 9px 7px; }
+    .bingo div { min-height: 11.5mm; padding: 5px 7px 4px; font-size: 8.4pt; }
+    .bingo u { height: 4.4mm; }
+    ol.rules { gap: 4px; }
+    .tear { padding-top: 9px; }
+    .card { padding: 9px 11px 11px; gap: 6px; }
+    .card h3 span { font-size: 8.6pt; }
+    .qa { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+    .qa div { padding: 3px 0; border-bottom: 0; }
+    .qa div span { font-size: 8.8pt; }
+    .qa i { height: 5.2mm; }
+    .runsheet div { padding: 4px 0; }
+    .runsheet p { font-size: 8.7pt; }
+    .asks { padding: 7px 10px; gap: 2px; }
+    ul.plain { gap: 4px; }
+    footer.tag { padding-top: 6px; font-size: 8.4pt; }
   }
 </style>
 
@@ -203,7 +244,7 @@
   <!-- ── 1면 ── -->
   <section class="sheet">
     <div class="head">
-      <p class="sub">미술 감상과 비평 · 2학기 1주차</p>
+      <p class="sub">미술 감상과 비평 · 2학년 2학기 · 1주차</p>
       <h1>감상과 비평, 첫 시간</h1>
       <p class="lead">이 수업에는 정답이 없습니다. 대신 근거가 있습니다.</p>
       <div class="nameplate">
@@ -214,16 +255,43 @@
     </div>
 
     <div class="block">
-      <header><span class="num">1</span><h2>먼저 써 보기</h2><span class="time">2분</span></header>
-      <p class="guide">배우기 전에 지금 생각을 그대로 씁니다. 학기 마지막 시간에 이 문장을 다시 읽어 볼 거예요.</p>
-      <div class="field">
-        <b>그림을 잘 본다는 건, 무엇을 할 수 있다는 뜻일까?</b>
-        <div class="lines"><i></i><i></i></div>
+      <header><span class="num">1</span><h2>이번 학기에 하는 일</h2><span class="time">6분</span></header>
+      <p class="guide">이 수업은 작품을 보고, 그 작품을 통해 <strong>나를 설명하는</strong> 순서로 갑니다. 세 과제가 하나로 이어집니다.</p>
+      <div class="wrap">
+        <table class="plan">
+          <thead>
+            <tr><th>시기</th><th>무엇을 하나</th><th>배점</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>8 ~ 10월</td>
+              <td><b>작가의 시선으로 나를 표현하다</b> — 50문50답으로 나를 살펴보고, 나를 가장 잘 표현할 작가를 찾아 그 작가의 방식으로 자화상을 그립니다. 얼굴을 꼭 그리지 않아도 됩니다.</td>
+              <td>40점</td>
+            </tr>
+            <tr>
+              <td>10 ~ 11월</td>
+              <td><b>나와 작가를 잇다</b> — 자화상을 가운데 두고, 작가에 대해 알아낸 것과 나에 대해 알아낸 것을 그림 마인드맵으로 연결합니다.</td>
+              <td>20점</td>
+            </tr>
+            <tr>
+              <td>11 ~ 12월</td>
+              <td><b>작가의 선을 따라 빛을 그리다</b> — 다른 작가의 작품에서 선을 분석해 비평문을 쓰고, 그 선을 내 방식으로 바꿔 LED 조명 스크래치 작품을 만듭니다.</td>
+              <td>40점</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><th>합계</th><td>지필고사 없음 · 수행평가 100%</td><td>100점</td></tr>
+          </tfoot>
+        </table>
       </div>
+      <ul class="notice">
+        <li><b>결과물만 보지 않습니다.</b> 과정 기록지가 함께 점수에 들어가고, 기록이 없으면 과제에 따라 5~10점까지 깎입니다.</li>
+        <li><b>기한이 곧 점수입니다.</b> 늦으면 한 주에 1점씩 감점, 안 내면 0점. 성취도는 A(80% 이상)·B(60% 이상)·C(40% 이상)입니다.</li>
+      </ul>
     </div>
 
     <div class="block">
-      <header><span class="num">2</span><h2>취향 빙고</h2><span class="time">10분 · 교실 전체</span></header>
+      <header><span class="num">2</span><h2>취향 빙고</h2><span class="time">9분 · 교실 전체</span></header>
       <p class="guide">해당하는 친구를 찾아 칸에 <strong>이름을 받습니다.</strong> 한 사람에게는 한 칸만 받을 수 있어요. 가로·세로·대각선으로 한 줄이 채워지면 손을 들고 알려 주세요.</p>
       <div class="bingo">
         <div><span>미술관이나 전시에 가 본 적이 있다</span><u></u></div>
@@ -257,7 +325,7 @@
       </div>
       <div class="field">
         <b>3초와 3분 사이에 무엇이 달라졌나요? 짝과 비교한 뒤 한 문장으로 쓰세요.</b>
-        <div class="lines"><i></i><i></i></div>
+        <div class="lines"><i></i></div>
       </div>
     </div>
 
@@ -267,37 +335,33 @@
   <!-- ── 2면 ── -->
   <section class="sheet">
     <div class="block">
-      <header><span class="num">4</span><h2>감상과 비평은 어떻게 다를까</h2><span class="time">11분</span></header>
+      <header><span class="num">4</span><h2>감상과 비평은 어떻게 다를까</h2><span class="time">10분</span></header>
       <div class="summary">
         <p><b>감상</b>은 작품을 보고 느끼는 것입니다. 무엇을 느껴도 틀리지 않습니다.</p>
-        <p><b>비평</b>은 그 느낌에 <b>근거를 붙여 말하는 것</b>입니다. 여기서부터는 아무 말이나 할 수 없습니다.</p>
-        <p>이 수업의 목표는 하나입니다. “좋다, 싫다”에서 멈추지 않고 <b>왜 그런지를 작품 안에서 찾아내기.</b></p>
+        <p><b>비평</b>은 그 느낌에 <b>근거를 붙여 말하는 것</b>입니다. “좋다, 싫다”에서 멈추지 않고 왜 그런지를 작품 안에서 찾아내는 일. 12월에 쓸 비평문도 결국 이것입니다.</p>
       </div>
-      <p class="guide">비평에는 순서가 있습니다. 이 네 단계는 학기 내내 계속 쓸 거예요. 앞에서 본 작품으로 지금 한 번 채워 봅니다.</p>
+      <p class="guide">비평에는 순서가 있습니다. 이 네 단계는 학기 내내 계속 씁니다. 앞에서 본 작품으로 지금 한 번 채워 봅니다.</p>
       <div class="wrap">
         <table>
           <thead>
-            <tr><th>단계</th><th>하는 일</th><th>주의할 점</th><th style="width:37%">앞의 작품으로 써 보기</th></tr>
+            <tr><th>단계</th><th>하는 일</th><th>주의할 점</th><th style="width:36%">앞의 작품으로 써 보기</th></tr>
           </thead>
           <tbody>
-            <tr><th>1. 서술</th><td>눈에 보이는 것만 말한다</td><td>느낌이나 평가는 아직</td><td class="write"><i></i><i></i></td></tr>
-            <tr><th>2. 분석</th><td>색, 선, 형태, 빛, 구도가 어떻게 쓰였는지 본다</td><td>미술 용어로</td><td class="write"><i></i><i></i></td></tr>
-            <tr><th>3. 해석</th><td>작가가 무엇을 말하려는지 추측한다</td><td>1·2에서 찾은 것을 근거로</td><td class="write"><i></i><i></i></td></tr>
-            <tr><th>4. 판단</th><td>좋은 작품인지, 왜 그런지 말한다</td><td>내 취향과 작품의 가치를 구분</td><td class="write"><i></i><i></i></td></tr>
+            <tr><th>1. 서술</th><td>눈에 보이는 것만 말한다</td><td>느낌이나 평가는 아직</td><td class="write"><i></i></td></tr>
+            <tr><th>2. 분석</th><td>색, 선, 형태, 빛, 구도가 어떻게 쓰였는지 본다</td><td>미술 용어로</td><td class="write"><i></i></td></tr>
+            <tr><th>3. 해석</th><td>작가가 무엇을 말하려는지 추측한다</td><td>1·2에서 찾은 것을 근거로</td><td class="write"><i></i></td></tr>
+            <tr><th>4. 판단</th><td>좋은 작품인지, 왜 그런지 말한다</td><td>내 취향과 작품의 가치를 구분</td><td class="write"><i></i></td></tr>
           </tbody>
         </table>
       </div>
-      <p class="guide">같은 작품을 봐도 사람마다 보는 곳이 다릅니다. 어디를 보느냐에 따라 평가가 갈립니다. <strong>내 생각에 가까운 쪽에 표시해 보세요.</strong></p>
-      <div class="wrap">
-        <table class="view">
-          <thead><tr><th>보는 방식</th><th>이렇게 묻는다</th><th>나</th></tr></thead>
-          <tbody>
-            <tr><td>모방론</td><td>실제 대상을 얼마나 그럴듯하게 담아냈나</td><td><span class="box"></span></td></tr>
-            <tr><td>표현론</td><td>작가의 감정과 생각이 전해지나</td><td><span class="box"></span></td></tr>
-            <tr><td>형식론</td><td>색과 형태, 구성 자체가 잘 짜였나</td><td><span class="box"></span></td></tr>
-            <tr><td>맥락론</td><td>그 시대와 사회에서 어떤 의미였나</td><td><span class="box"></span></td></tr>
-          </tbody>
-        </table>
+      <div class="field">
+        <b>같은 작품을 봐도 사람마다 보는 곳이 다릅니다. 나는 어디를 보았나요?</b>
+        <div class="choices">
+          <span><span class="box"></span> 실제와 닮았나 <em>모방론</em></span>
+          <span><span class="box"></span> 감정이 전해지나 <em>표현론</em></span>
+          <span><span class="box"></span> 구성이 잘 짜였나 <em>형식론</em></span>
+          <span><span class="box"></span> 그 시대에 어떤 의미였나 <em>맥락론</em></span>
+        </div>
       </div>
     </div>
 
@@ -306,40 +370,36 @@
       <p class="guide">아래 틀을 그대로 씁니다. 뒤 칸에는 <strong>작품에서 눈으로 확인할 수 있는 것</strong>을 써야 합니다. “그냥”이나 “느낌상”은 근거가 아닙니다.</p>
       <div class="field">
         <b>나는 이 작품이 __________________ 하다고 생각한다.<br>왜냐하면 작품 속의 __________________ 때문이다.</b>
-        <div class="lines"><i></i><i></i><i></i></div>
+        <div class="lines"><i></i><i></i></div>
       </div>
     </div>
 
     <div class="block">
-      <header><span class="num">6</span><h2>이 수업의 약속과 안내</h2><span class="time">5분</span></header>
+      <header><span class="num">6</span><h2>이 수업의 약속</h2><span class="time">4분</span></header>
       <ol class="rules">
         <li><b>틀린 감상은 없지만, 근거 없는 비평은 없다.</b><span>말할 때 작품의 어디를 보고 그렇게 생각했는지 함께 말합니다.</span></li>
         <li><b>다른 해석은 끝까지 듣는다.</b><span>내 생각과 다른 의견이 나오는 순간이 이 수업에서 가장 중요합니다.</span></li>
-        <li><b>본 것은 기록으로 남긴다.</b><span>감상은 기억에 남지 않습니다. 기록한 만큼이 학기말의 내 실력입니다.</span></li>
+        <li><b>본 것은 기록으로 남긴다.</b><span>감상은 기억에 남지 않습니다. 기록한 만큼이 학기말의 내 점수이자 실력입니다.</span></li>
       </ol>
-      <div class="pair">
-        <div class="field"><b>평가 방법과 시기</b><div class="lines"><i></i><i></i></div></div>
-        <div class="field"><b>준비물과 다음 시간</b><div class="lines"><i></i><i></i></div></div>
+      <div class="field">
+        <b>다음 시간 · 준비물</b>
+        <div class="lines"><i></i></div>
       </div>
     </div>
 
     <div class="tear">
-      <p class="cap">여기를 잘라 수업이 끝나기 전에 제출하세요.</p>
+      <p class="cap">여기를 잘라 수업이 끝나기 전에 제출하세요. 점수와는 관계없습니다.</p>
       <div class="card">
-        <h3>감상 카드</h3>
-        <div class="nameplate">
-          <div><b>학년 · 반 · 번호</b><i></i></div>
-          <div><b>이름</b><i></i></div>
-        </div>
-        <div class="field">
-          <b>요즘 내 눈길을 끈 이미지 하나 (그림, 사진, 앨범 커버, 게임 화면 무엇이든)</b>
-          <div class="lines"><i></i></div>
-          <b>그것에 눈길이 간 이유를 한 줄로</b>
-          <div class="lines"><i></i></div>
-        </div>
-        <div class="field">
-          <b>이 수업에서 해 보고 싶은 것, 또는 미술과 이어질 수 있는 내 진로 관심</b>
-          <div class="lines"><i></i><i></i></div>
+        <h3>나를 소개하는 여섯 문답 <span>다음 시간 50문50답의 맛보기입니다</span></h3>
+        <div class="qa">
+          <div><span>학년 · 반 · 번호</span><i></i></div>
+          <div><span>이름</span><i></i></div>
+          <div><span>요즘 가장 많이 듣는 노래</span><i></i></div>
+          <div><span>이유 없이 자꾸 끌리는 색</span><i></i></div>
+          <div><span>친구들이 말하는 내 성격</span><i></i></div>
+          <div><span>나를 사물 하나에 비유하면</span><i></i></div>
+          <div><span>요즘 눈길을 끈 이미지 하나</span><i></i></div>
+          <div><span>미술과 이어질 진로 관심</span><i></i></div>
         </div>
       </div>
     </div>
@@ -352,29 +412,28 @@
     <div class="head">
       <p class="sub">교사용 · 학생 배부 안 함</p>
       <h1>1주차 50분 운영안</h1>
-      <p class="lead">학생 유인물 1·2면과 짝을 이루는 진행 순서입니다.</p>
+      <p class="lead">학생 유인물 1·2면과 짝을 이루는 진행 순서입니다. 8월 3시수 중 첫 시간에 해당하며, 관찰평가 대상 시간입니다.</p>
     </div>
 
     <div class="block">
       <header><h2>수업 전 준비</h2></header>
       <ul class="plain">
-        <li><b>투사할 작품 1점</b> — 3초에 다 담기지 않을 만큼 요소가 많은 작품이어야 실험이 성립합니다. 얀 반 에이크 〈아르놀피니 부부의 초상〉(1434) 또는 김홍도 〈씨름〉(《단원 풍속도첩》)을 권합니다. 둘 다 저작권이 만료되어 고해상 이미지를 구하기 쉽습니다.</li>
-        <li><b>3초 노출 방법</b> — 화면을 띄우고 “셋, 둘, 하나”를 센 뒤 즉시 화면을 가립니다(윈도우+D 또는 모니터 전원). 미리 한 번 연습해 두면 매끄럽습니다.</li>
-        <li><b>유인물</b> — 1·2면 양면 인쇄. 2면 아래 감상 카드는 절취선에서 잘라 회수합니다.</li>
-        <li><b>회수용 봉투</b> — 반별로 감상 카드를 모아 둡니다. 학기 내내 학생 파악과 진로 연계 자료로 씁니다.</li>
+        <li><b>투사할 작품 1점</b> — 3초에 다 담기지 않을 만큼 요소가 많아야 실험이 성립합니다. 얀 반 에이크 〈아르놀피니 부부의 초상〉(1434) 또는 김홍도 〈씨름〉을 권합니다. 둘 다 저작권 만료 작품입니다.</li>
+        <li><b>3초 노출</b> — “셋, 둘, 하나”를 센 뒤 즉시 가립니다(윈도우+D). 미리 연습해 두면 매끄럽습니다.</li>
+        <li><b>유인물</b> — 1·2면 양면 인쇄. 2면 아래 여섯 문답은 절취선에서 잘라 회수하고, 반별로 모아 수행평가① 작가 선정 상담 때 씁니다.</li>
       </ul>
     </div>
 
     <div class="block">
       <header><h2>시간 배분</h2></header>
       <div class="runsheet">
-        <div><time>00–03</time><span><b>인사, 과목 소개 한 줄</b><p>“1학기에는 만들었고, 2학기에는 봅니다. 그리고 본 것을 말로 옮깁니다.”</p></span></div>
-        <div><time>03–05</time><span><b>1번 먼저 써 보기</b><p>걷지 않고 유인물에 남깁니다. 학기말에 다시 꺼내 비교한다고 예고하면 무게가 실립니다.</p></span></div>
-        <div><time>05–15</time><span><b>2번 취향 빙고</b><p>일어나 돌아다니게 합니다. 한 줄 완성한 학생이 나오면 종료하고, 전원 완성까지 기다리지 않습니다. 정리 발문은 “이름 받기가 가장 어려웠던 칸은?”</p></span></div>
-        <div><time>15–27</time><span><b>3번 3초·3분 감상</b><p>3초 노출 → 쓰기 2분 → 3분 감상(침묵 유지) → 쓰기 3분 → 짝과 비교 2분. 침묵 3분이 길게 느껴지지만 이 수업의 핵심 체험이라 줄이지 않습니다.</p></span></div>
-        <div><time>27–38</time><span><b>4번 감상과 비평, 4단계와 보는 방식</b><p>설명은 짧게 하고, 방금 본 작품으로 1~4단계를 학생 발화로 채웁니다. 4단계 판단에서 의견이 갈리면 그 자리에서 네 가지 보는 방식을 꺼냅니다.</p></span></div>
-        <div><time>38–45</time><span><b>5번 한 문장 비평, 3~4명 발표</b><p>발표 뒤 교사는 평가하지 않고 근거만 되짚습니다. “그 근거를 작품 어디에서 찾았지?”</p></span></div>
-        <div><time>45–50</time><span><b>6번 약속과 평가 안내, 감상 카드 회수</b><p>평가 방법과 준비물은 학생이 유인물 빈칸에 직접 받아쓰게 합니다.</p></span></div>
+        <div><time>00–03</time><span><b>인사, 과목 소개 한 줄</b><p>“1학기에는 만들었고, 2학기에는 봅니다. 그리고 본 것으로 나를 설명합니다.”</p></span></div>
+        <div><time>03–09</time><span><b>1번 학기 흐름과 평가 안내</b><p>세 과제가 하나로 이어짐을 강조. 지필고사 없음, 기록지와 기한이 점수라는 점을 먼저 못 박습니다.</p></span></div>
+        <div><time>09–18</time><span><b>2번 취향 빙고</b><p>일어나 돌아다니게 합니다. 한 줄 완성자가 나오면 종료. 정리 발문 “이름 받기가 가장 어려웠던 칸은?”</p></span></div>
+        <div><time>18–30</time><span><b>3번 3초·3분 감상</b><p>3초 노출 → 쓰기 2분 → 3분 감상(침묵) → 쓰기 3분 → 짝 비교 2분. 침묵 3분은 이 수업의 핵심 체험이므로 줄이지 않습니다.</p></span></div>
+        <div><time>30–40</time><span><b>4번 감상과 비평, 비평 4단계</b><p>설명은 짧게, 방금 본 작품으로 1~4단계를 학생 발화로 채웁니다. 12월 선 비평의 예고편이라고 말해 둡니다.</p></span></div>
+        <div><time>40–46</time><span><b>5번 한 문장 비평, 3~4명 발표</b><p>교사는 평가하지 않고 근거만 되짚습니다. “그 근거를 작품 어디에서 찾았지?”</p></span></div>
+        <div><time>46–50</time><span><b>6번 약속, 여섯 문답 회수</b><p>다음 시간 50문50답으로 이어진다고 예고. 준비물은 학생이 빈칸에 받아쓰게 합니다.</p></span></div>
       </div>
     </div>
 
@@ -384,16 +443,15 @@
         <p>“3초 동안 본 것과 3분 동안 본 것 중, 어느 쪽이 이 작품에 더 가까울까?”</p>
         <p>“방금 어둡다고 했는데, 화면의 어디가 그렇게 만들었지?”</p>
         <p>“같은 그림을 보고 둘이 다르게 말했어. 둘 다 맞을 수 있을까?”</p>
-        <p>“이 작품을 좋아하지 않아도 훌륭한 작품이라고 말할 수 있을까?”</p>
+        <p>“이 작품을 좋아하지 않아도 훌륭한 작품이라고 말할 수 있을까?” (판단과 취향의 구분)</p>
       </div>
     </div>
 
     <div class="block">
       <header><h2>여유가 있거나 연속 차시일 때</h2></header>
       <ul class="plain">
-        <li><b>말 없이 설명하기(10분)</b> — 짝을 등지고 앉히고 한 명만 작품을 봅니다. “예쁘다, 좋다” 같은 말은 금지하고 색과 형태로만 설명하면, 짝은 듣고 그립니다. 그림을 맞춰 보며 무엇이 어긋났는지 확인합니다. 1단계 서술이 왜 필요한지 몸으로 알게 됩니다. 몬드리안 〈빨강, 파랑, 노랑의 구성〉처럼 요소가 단순한 작품이 적합합니다.</li>
-        <li><b>1학기와 잇기(5분)</b> — “1학기에는 그림으로 나를 읽었고, 2학기에는 그림으로 남을 읽습니다. 방법은 같습니다. 보이는 것에서 근거를 찾는 것.”</li>
-        <li><b>학기 흐름 예고(5분)</b> — 단원을 큰 덩어리로만 보여 줍니다. 작가와 발상 → 작품 속 의미 → 색과 공간 → 인물과 재료 → 디자인·매체·생태·사회 → 미술 시장과 비평 쓰기.</li>
+        <li><b>말 없이 설명하기(10분)</b> — 짝을 등지고 앉히고 한 명만 작품을 봅니다. “예쁘다, 좋다”는 금지하고 색과 형태로만 설명하면 짝은 듣고 그립니다. 맞춰 보며 무엇이 어긋났는지 확인하면, 1단계 서술이 왜 필요한지 몸으로 알게 됩니다. 몬드리안 〈빨강, 파랑, 노랑의 구성〉처럼 요소가 단순한 작품이 적합합니다.</li>
+        <li><b>선에 미리 눈 뜨게 하기(7분)</b> — 같은 작품에서 선만 따로 보게 하고 굵기·방향·반복·속도감을 말로 옮깁니다. 12월 수행평가③의 분석 항목과 그대로 이어집니다.</li>
       </ul>
     </div>
 
@@ -401,8 +459,8 @@
       <header><h2>유의점</h2></header>
       <ul class="plain">
         <li><b>정답을 말해 주지 않기</b> — 첫 시간에 교사가 해석을 확정하면 남은 학기 동안 학생은 교사의 답을 기다립니다. 오늘은 근거를 되묻는 역할만 합니다.</li>
-        <li><b>빙고에서 겉도는 학생</b> — 못 채운 칸이 있어도 괜찮다고 미리 말해 둡니다. 필요하면 교사가 한 칸을 채워 줍니다.</li>
-        <li><b>감상 카드는 점수와 무관</b> — 평가에 들어가지 않는다고 분명히 밝혀야 솔직하게 씁니다.</li>
+        <li><b>자화상 부담 미리 덜어 주기</b> — 얼굴을 사실적으로 그리는 과제가 아니라고 첫 시간에 말해 두면 “나 그림 못 그리는데”로 시작하는 이탈이 줄어듭니다.</li>
+        <li><b>여섯 문답은 점수와 무관</b> — 평가에 들어가지 않는다고 분명히 밝혀야 솔직하게 씁니다. 빙고에서 못 채운 칸이 있어도 괜찮다고 미리 말해 둡니다.</li>
       </ul>
     </div>
 
